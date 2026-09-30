@@ -1,0 +1,33 @@
+import pandas as pd
+
+# ---- 1. Load the CSV file ----
+# Replace 'your_file.csv' with the actual filename
+df = pd.read_csv("your_file.csv")
+
+# ---- 2. Inspect the data ----
+print("=== First 5 Rows ===")
+print(df.head())
+
+# ---- 3. Example: Categorize based on a numeric column ----
+# Let's assume your CSV has a column named "Score"
+# You can rename this to match your actual data
+
+def categorize_score(value):
+    if value >= 90:
+        return "Excellent"
+    elif value >= 75:
+        return "Good"
+    elif value >= 60:
+        return "Average"
+    else:
+        return "Needs Improvement"
+
+df["Category"] = df["Score"].apply(categorize_score)
+
+# ---- 4. Show results ----
+print("\n=== Categorized Data ===")
+print(df[["Score", "Category"]])
+
+# ---- 5. Save the categorized CSV ----
+df.to_csv("categorized_output.csv", index=False)
+print("\nSaved categorized_output.csv")
