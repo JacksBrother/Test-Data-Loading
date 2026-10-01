@@ -1,0 +1,49 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# -----------------------------
+# Configuration
+# -----------------------------
+FILE_PATH = "401k_daily_balance.csv"   # <-- your CSV file
+DATE_COLUMN = "Date"
+BALANCE_COLUMN = "Balance"
+MOVING_AVG_WINDOW = 20                 # 20‑day moving average
+
+# -----------------------------
+# Load the data
+# -----------------------------
+df = pd.read_csv(FILE_PATH)
+
+# Ensure date column is parsed correctly
+df[DATE_COLUMN] = pd.to_datetime(df[DATE_COLUMN])
+
+# Sort by date (important if file is unordered)
+df = df.sort_values(DATE_COLUMN)
+
+# -----------------------------
+# Compute moving average
+# -----------------------------
+df["Moving_Avg"] = df[BALANCE_COLUMN].rolling(MOVING_AVG_WINDOW).mean()
+
+# -----------------------------
+# Plot
+# -----------------------------
+plt.figure(figsize=(12, 6))
+
+# Scatter plot of daily balance
+plt.scatter(df[DATE_COLUMN], df[BALANCE_COLUMN], 
+            color="steelblue", s=20, label="Daily Balance")
+
+# Trend line (moving average)
+plt.plot(df[DATE_COLUMN], df["Moving_Avg"], 
+         color="darkorange", linewidth=2.5, label=f"{MOVING_AVG_WINDOW}-Day Moving Avg")
+
+# Labels and formatting
+plt.title("Daily 401k Balance with Moving Average Trend")
+plt.xlabel("Date")
+plt.ylabel("Balance ($)")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.legend()
+
+plt.tight_layout()
+plt.show()
